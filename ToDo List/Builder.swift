@@ -18,7 +18,8 @@ class Builder: BuilderProtocol {
         let network = NetworkService()
         let presenter = MainPresenter(view: mainVC, network: network)
         mainVC.mainPresenterProtocol = presenter
-        let nav = UINavigationController(rootViewController: mainVC)
+        let nav = MainNavigationViewController(rootViewController: mainVC)
+        nav.pushClouser = { mainVC.notification?() }
         return nav
     }
     

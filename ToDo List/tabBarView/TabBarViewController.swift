@@ -10,7 +10,6 @@ import UIKit
 class TabBarViewController: UITabBarController {
     
     private let mainViewController = Builder.createMainView()
-
     
     private lazy var btn1 = getButton(icon: "house.fill", tag: 0, action: action, color: .gray)
     private lazy var btn2 = getButton(icon: "plus.circle.fill", tag: 1, action: action, color: .gray)
@@ -21,6 +20,7 @@ class TabBarViewController: UITabBarController {
                 let self = self else {return}
         self.selectedIndex = sender.tag
         self.setOpacite(tag: sender.tag)
+        self.getPresent(tag: sender.tag)
     }
     
     
@@ -46,12 +46,13 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        btn2.tintColor = UIColor(red: 1, green: 0.1764705882, blue: 0.3215686275, alpha: 1)
-        btn1.tintColor = UIColor(red: 1, green: 0.1764705882, blue: 0.3215686275, alpha: 1)
+        
         view.addSubview(stackView)
         setupConstraint()
+        setOpacite(tag: 0)
         tabBar.isHidden = true
-        setViewControllers([mainViewController, UIViewController()], animated: true)
+        setViewControllers([mainViewController], animated: true)
+       
     }
     private func setupConstraint() {
         NSLayoutConstraint.activate([
@@ -71,6 +72,16 @@ class TabBarViewController: UITabBarController {
             }
     }
     
+    private func getPresent(tag: Int) {
+        if tag == 1 {
+                let modalVC =  UIViewController()
+                modalVC.view.backgroundColor = .darkGray
+                modalVC.modalPresentationStyle = .custom
+                modalVC.transitioningDelegate = self
+                self.present(modalVC, animated: true, completion: nil)
+        }
+    }
+    
     private func getButton(icon:String, tag: Int, action: UIAction, color: UIColor ) -> UIButton {
         return {
             $0.setBackgroundImage(UIImage(systemName: icon), for: .normal)
@@ -79,8 +90,10 @@ class TabBarViewController: UITabBarController {
            return $0
         }(UIButton(primaryAction: action))
     }
+    
     private func setOpacite(tag: Int) {
-        
+        btn2.tintColor = UIColor(red: 1, green: 0.1764705882, blue: 0.3215686275, alpha: 1)
+        btn1.tintColor = UIColor(red: 1, green: 0.1764705882, blue: 0.3215686275, alpha: 1)
         [btn1, btn3].forEach { btn in
             if btn.tag != tag {
                 btn.tintColor = .gray
@@ -88,6 +101,13 @@ class TabBarViewController: UITabBarController {
                 btn.tintColor = UIColor(red: 1, green: 0.1764705882, blue: 0.3215686275, alpha: 1)
             }
         }
+    }
+}
+
+extension TabBarViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let halfSizePresentationController = HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
+        return halfSizePresentationController
     }
 }
 

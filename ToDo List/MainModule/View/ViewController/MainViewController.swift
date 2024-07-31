@@ -12,17 +12,19 @@ protocol MainViewControllerProtocol {
     func failure(error: Error)
 }
 
-class MainViewController: UIViewController {
-
     
-    var mainPresenterProtocol: MainPresenterProtocol!
+class MainViewController: UIViewController {
+    
+    public var mainPresenterProtocol: MainPresenterProtocol!
+    public var notification: (() -> Void)?
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(red: 0.9294117647, green: 0.9568627451, blue: 0.9490196078, alpha: 1)
+        notification = {
+            print("sassa")
+        }
     }
-
-
 }
 
 extension MainViewController: MainViewControllerProtocol {
