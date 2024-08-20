@@ -76,8 +76,7 @@ class TabBarViewController: UITabBarController {
         if tag == 1 {
                 let modalVC =  UIViewController()
                 modalVC.view.backgroundColor = .darkGray
-                modalVC.modalPresentationStyle = .custom
-                modalVC.transitioningDelegate = self
+
                 self.present(modalVC, animated: true, completion: nil)
         }
     }
@@ -104,10 +103,5 @@ class TabBarViewController: UITabBarController {
     }
 }
 
-extension TabBarViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let halfSizePresentationController = HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
-        return halfSizePresentationController
-    }
-}
+
 
