@@ -74,10 +74,8 @@ class TabBarViewController: UITabBarController {
     
     private func getPresent(tag: Int) {
         if tag == 1 {
-                let modalVC =  UIViewController()
-                modalVC.view.backgroundColor = .darkGray
-
-                self.present(modalVC, animated: true, completion: nil)
+            let addVC = Builder.createAddView()
+            self.present(addVC, animated: true, completion: nil)
         }
     }
     

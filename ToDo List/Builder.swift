@@ -10,9 +10,11 @@ import UIKit
 
 protocol BuilderProtocol {
    static func createMainView() -> UIViewController
+    static func createAddView() -> UIViewController
 }
 
 class Builder: BuilderProtocol {
+    
     static func createMainView() -> UIViewController {
         let mainVC = MainViewController()
         let network = NetworkService()
@@ -23,5 +25,11 @@ class Builder: BuilderProtocol {
         return nav
     }
     
-    
+    static func createAddView() -> UIViewController {
+        let addVC = AddViewController()
+        let network = NetworkService()
+        let presenter = AddPresenter(view: addVC, networkService: network)
+        addVC.addPresenter = presenter
+        return addVC
+    }
 }

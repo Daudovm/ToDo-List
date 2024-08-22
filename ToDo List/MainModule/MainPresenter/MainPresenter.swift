@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MainPresenterProtocol {
+protocol MainPresenterProtocol: AnyObject {
     init(view: MainViewControllerProtocol, network: NetworkService)
     func getFetch()
     func getSave(_ model: MainModel)
