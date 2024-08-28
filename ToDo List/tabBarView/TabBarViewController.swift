@@ -10,7 +10,7 @@ import UIKit
 class TabBarViewController: UITabBarController {
     
     private let mainViewController = Builder.createMainView()
-    
+   
     private lazy var btn1 = getButton(icon: "house.fill", tag: 0, action: action, color: .gray)
     private lazy var btn2 = getButton(icon: "plus.circle.fill", tag: 1, action: action, color: .gray)
     private lazy var btn3 = getButton(icon: "clock", tag: 2, action: action, color: .gray)
@@ -22,8 +22,7 @@ class TabBarViewController: UITabBarController {
         self.setOpacite(tag: sender.tag)
         self.getPresent(tag: sender.tag)
     }
-    
-    
+        
     private lazy var stackView: UIStackView = {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
@@ -52,7 +51,7 @@ class TabBarViewController: UITabBarController {
         setOpacite(tag: 0)
         tabBar.isHidden = true
         setViewControllers([mainViewController], animated: true)
-       
+        
     }
     private func setupConstraint() {
         NSLayoutConstraint.activate([

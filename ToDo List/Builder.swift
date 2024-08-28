@@ -11,9 +11,12 @@ import UIKit
 protocol BuilderProtocol {
    static func createMainView() -> UIViewController
     static func createAddView() -> UIViewController
+    static func createTaskView(_ model: MainModel, delete: @escaping () -> Void) -> UIViewController
 }
 
 class Builder: BuilderProtocol {
+    
+  
     
     static func createMainView() -> UIViewController {
         let mainVC = MainViewController()
@@ -31,5 +34,16 @@ class Builder: BuilderProtocol {
         let presenter = AddPresenter(view: addVC, networkService: network)
         addVC.addPresenter = presenter
         return addVC
+    }
+    
+    static func createTaskView(_ model: MainModel, delete: @escaping () -> Void) -> UIViewController {
+        let taskView = TaskViewController()
+        let network = NetworkService()
+        let presenter = TaskPresenter(view: taskView, network: network, model: model)
+        taskView.taskPresenter = presenter
+        taskView.clouserDelete = {
+            delete()
+        }
+        return taskView
     }
 }

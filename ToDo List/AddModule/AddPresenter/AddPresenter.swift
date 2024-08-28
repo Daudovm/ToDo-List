@@ -9,7 +9,8 @@ import Foundation
 
 protocol AddPresenterProtocol: AnyObject {
     init(view: AddViewControllerProtocol, networkService: NetworkService)
-    func getSave(_ model: MainModel)
+    func getSaves(_ model: MainModel)
+    
 }
 
 class AddPresenter: AddPresenterProtocol {
@@ -22,7 +23,8 @@ class AddPresenter: AddPresenterProtocol {
         self.networkServise = networkService
     }
     
-    func getSave(_ model: MainModel) {
+    func getSaves(_ model: MainModel) {
+        
         networkServise.save(task: model)
         view?.succes()
     }

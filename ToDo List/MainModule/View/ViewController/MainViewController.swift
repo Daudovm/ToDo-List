@@ -14,20 +14,24 @@ protocol MainViewControllerProtocol {
 
 
 class MainViewController: UIViewController {
-    
+
     public var mainPresenterProtocol: MainPresenterProtocol!
     public var notification: (() -> Void)?
+    public var reloadDataComlection: (() -> Void)?
     private var mainCollectionView: UICollectionView!
+ 
     
-    private var arraySection = ["", "Сегодня", "Завтра"]
+    private var arraySection = [""]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         
         view.backgroundColor = UIColor(red: 0.9294117647, green: 0.9568627451, blue: 0.9490196078, alpha: 1)
-        
         createCollectionView()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadDataCollectionAction), name: .didReloadData, object: nil)
     }
-    
+  
     //    MARK: UICollectionView
     private func createCollectionView() {
         mainCollectionView = UICollectionView(frame: view.frame, collectionViewLayout: UICollectionViewFlowLayout())
@@ -48,23 +52,29 @@ class MainViewController: UIViewController {
             mainCollectionView.heightAnchor.constraint(equalToConstant: view.frame.height - 100)
         ])
     }
+    
+    @objc func reloadDataCollectionAction() {
+        self.mainPresenterProtocol.getFetch()
+        self.mainCollectionView.reloadData()
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return arraySection.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return mainPresenterProtocol.mainModels?.count ?? 0
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell.self", for: indexPath) as? MainCollectionViewCell else { return UICollectionViewCell()}
-        
+        guard let model = mainPresenterProtocol.mainModels?[indexPath.item] else { return UICollectionViewCell() }
+        cell.makeModel(model)
         return cell
     }
     
@@ -84,12 +94,20 @@ extension MainViewController: UICollectionViewDataSource {
             return headerView
         }
     }
-    
-    
 }
 
-
-
+extension MainViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = mainPresenterProtocol.mainModels?[indexPath.item] else { return  }
+        let taskVC = Builder.createTaskView(model) {
+            self.mainPresenterProtocol.getDelete(model)
+            self.mainPresenterProtocol.getFetch()
+            self.mainCollectionView.reloadData()
+        }
+        self.present(taskVC, animated: true)
+        print("----------------")
+    }
+}
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
@@ -114,12 +132,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 
 
+// MARK: MainViewControllerProtocol
 extension MainViewController: MainViewControllerProtocol {
     func success() {
-        
+        mainCollectionView.reloadData()
     }
     
     func failure(error: Error) {
-        
+        print(error)
     }
 }
+

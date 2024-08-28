@@ -10,7 +10,7 @@ import Foundation
 protocol MainPresenterProtocol: AnyObject {
     init(view: MainViewControllerProtocol, network: NetworkService)
     func getFetch()
-    func getSave(_ model: MainModel)
+    func update()
     func getDelete(_ model: MainModel)
     var mainModels: [MainModel]? { get set }
 }
@@ -32,16 +32,15 @@ class MainPresenter: MainPresenterProtocol {
             switch result {
             case .success(let data):
                 self.mainModels = data
-                self.view?.success()
             case .failure(let error):
                 self.view?.failure(error: error)
             }
         }
     }
     
-    func getSave(_ model: MainModel) {
-        self.networkServise.save(task: model)
+    func update() {
         getFetch()
+        self.view?.success()
     }
     
     func getDelete(_ model: MainModel) {
