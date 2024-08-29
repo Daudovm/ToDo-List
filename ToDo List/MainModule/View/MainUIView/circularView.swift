@@ -70,7 +70,10 @@ class CircularView: UIView {
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
             progressLayer.add(animation, forKey: "progressAnim")
+        }else {
+            progressLayer.strokeEnd = progress
         }
+        
         textLabel.text = textCenter
         
     }

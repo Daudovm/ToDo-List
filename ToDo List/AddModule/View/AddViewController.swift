@@ -225,7 +225,8 @@ class AddViewController: UIViewController {
     @objc func addPlan(sender: UIButton) {
         
         guard let title = addTextField.text else { return }
-        model = MainModel(image: nameImage, title: title , descriptions: addTextView.text, time: date, pausa: true)
+        let startTime = Date()
+        model = MainModel(image: nameImage, title: title , descriptions: addTextView.text, time: date, timeStart: startTime, pausa: true)
         addPresenter.getSaves(model)
     }
     

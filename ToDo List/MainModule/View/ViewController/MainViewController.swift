@@ -84,7 +84,6 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         let titleSection = arraySection[indexPath.section]
-        print(indexPath.section)
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MainCollectionReusableView", for: indexPath) as! MainCollectionReusableView
             return cell
@@ -105,7 +104,6 @@ extension MainViewController: UICollectionViewDelegate {
             self.mainCollectionView.reloadData()
         }
         self.present(taskVC, animated: true)
-        print("----------------")
     }
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout {

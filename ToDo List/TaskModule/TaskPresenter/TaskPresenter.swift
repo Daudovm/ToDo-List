@@ -9,7 +9,6 @@ import Foundation
 
 protocol TaskPresenterProtocol: AnyObject {
     init(view: TaskViewControllerProtocol, network: NetworkServiceProrocol, model: MainModel)
-    func getRemove(_ model: MainModel)
     var model: MainModel? { get set }
 }
 
@@ -24,9 +23,5 @@ class TaskPresenter: TaskPresenterProtocol {
         self.view = view
         self.model = model
     }
-    
-    func getRemove(_ model: MainModel) {
-        network.delete(task: model)
-        view?.success()
-    }
+
 }

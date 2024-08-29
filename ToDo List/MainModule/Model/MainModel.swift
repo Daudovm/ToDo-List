@@ -15,14 +15,16 @@ class MainModel {
     var title: String
     var descriptions: String
     var time: Date
+    var timeStart: Date
     var pausa: Bool
     
-    init(id: UUID = UUID(),image: String, title: String, descriptions: String, time: Date,  pausa: Bool) {
+    init(id: UUID = UUID(),image: String, title: String, descriptions: String, time: Date,  timeStart: Date, pausa: Bool) {
         self.image = image
         self.id = id
         self.title = title
         self.descriptions = descriptions
         self.time = time
+        self.timeStart = timeStart
         self.pausa = pausa
     }
 }
