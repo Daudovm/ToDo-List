@@ -8,18 +8,18 @@
 import Foundation
 
 protocol AddPresenterProtocol: AnyObject {
-    init(view: AddViewControllerProtocol, networkService: NetworkService)
+    init(view: AddViewControllerProtocol, networkService: NetworkServiceProrocol)
     func getSaves(_ model: MainModel)
     
 }
 
 class AddPresenter: AddPresenterProtocol {
     
-    let view: AddViewControllerProtocol?
-    let networkServise: NetworkService!
+    weak var view: AddViewControllerProtocol?
+    let networkServise: NetworkServiceProrocol!
 
-    required init(view: AddViewControllerProtocol, networkService: NetworkService) {
-        self.view = view 
+    required init(view: AddViewControllerProtocol, networkService: NetworkServiceProrocol) {
+        self.view = view
         self.networkServise = networkService
     }
     

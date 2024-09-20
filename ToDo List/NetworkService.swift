@@ -12,9 +12,12 @@ protocol NetworkServiceProrocol {
     func fetch(complection: @escaping (Result<[MainModel], Error>) -> Void)
     func save(task: MainModel)
     func delete(task: MainModel)
+    func update(task: MainModel, isStarted: Bool)
 }
 
+@available(iOS 17, *)
 class NetworkService: NetworkServiceProrocol {
+   
     
     var conteiner: ModelContainer?
     var contex: ModelContext?
@@ -47,6 +50,22 @@ class NetworkService: NetworkServiceProrocol {
     
     func delete(task: MainModel) {
         contex?.delete(task)
+      
+    }
+    func update(task: MainModel, isStarted: Bool) {
+        let descriptions = FetchDescriptor<MainModel>()
+        do {
+            guard let data = try contex?.fetch(descriptions) else { return }
+            data.forEach { model in
+                if model == task {
+                    model.pausa = isStarted
+                }
+            }
+            try contex?.save()
+        }catch {
+            print("Error Update")
+        }
+        
     }
     
     

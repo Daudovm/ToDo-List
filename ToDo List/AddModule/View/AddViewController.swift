@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol AddViewControllerProtocol {
+protocol AddViewControllerProtocol: AnyObject{
     func succes()
 }
 
@@ -150,7 +150,7 @@ class AddViewController: UIViewController {
     private func createConstreint() {
         
         NSLayoutConstraint.activate([
-            addTitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            addTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
             addTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             addNameLabel.topAnchor.constraint(equalTo: addTitleLabel.bottomAnchor, constant: 30),
@@ -183,7 +183,7 @@ class AddViewController: UIViewController {
             addDatePicker.topAnchor.constraint(equalTo: addTimeLabel.bottomAnchor, constant: 20),
             addDatePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
+            addButton.topAnchor.constraint(equalToSystemSpacingBelow: addDatePicker.bottomAnchor, multiplier: 3),
             addButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.0568),
             addButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
             addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -191,7 +191,6 @@ class AddViewController: UIViewController {
         ])
     }
   
-    
     private func setupStackView() {
         addStackView.translatesAutoresizingMaskIntoConstraints = false
         addScrollView.addSubview(addStackView)
@@ -225,8 +224,15 @@ class AddViewController: UIViewController {
     @objc func addPlan(sender: UIButton) {
         
         guard let title = addTextField.text else { return }
+        guard title != "" else {  alertContoller(title: "Ошибка", messege: "У вас нет заголовка, добавьте заголовка"); return }
+        
         let startTime = Date()
-        model = MainModel(image: nameImage, title: title , descriptions: addTextView.text, time: date, timeStart: startTime, pausa: true)
+        guard Int(date.timeIntervalSince(startTime)) >= 59 else {
+            alertContoller(title: nil, messege: "Добавьте крайный срок")
+            return
+        }
+        
+        model = MainModel(image: nameImage, title: title , descriptions: addTextView.text, time: date, timeStart: startTime, pausa: false)
         addPresenter.getSaves(model)
     }
     
@@ -246,9 +252,16 @@ class AddViewController: UIViewController {
             $0.setBackgroundImage(UIImage(named: nameIcon), for: .normal)
             $0.addTarget(self, action: action, for: .touchUpInside)
             $0.translatesAutoresizingMaskIntoConstraints = false
-            
             return $0
         }(UIButton())
+    }
+    
+//    MARK: Alert Function
+    private func alertContoller(title: String?, messege: String?) {
+        let alert = UIAlertController(title: title, message: messege, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -260,12 +273,7 @@ class AddViewController: UIViewController {
 
 extension AddViewController: AddViewControllerProtocol {
     func succes() {
- 
-        self.dismiss(animated: true) {
-        
-        }
-        print("sdvdsvsvs")
-        
+        self.dismiss(animated: true)
     }
     
 }

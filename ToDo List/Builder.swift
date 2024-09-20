@@ -9,15 +9,14 @@ import Foundation
 import UIKit
 
 protocol BuilderProtocol {
-   static func createMainView() -> UIViewController
+    static func createMainView() -> UIViewController
     static func createAddView() -> UIViewController
     static func createTaskView(_ model: MainModel, delete: @escaping () -> Void) -> UIViewController
+    static func createExecuteView() -> UIViewController
 }
 
 class Builder: BuilderProtocol {
-    
-  
-    
+   
     static func createMainView() -> UIViewController {
         let mainVC = MainViewController()
         let network = NetworkService()
@@ -46,4 +45,15 @@ class Builder: BuilderProtocol {
         }
         return taskView
     }
+    
+    static func createExecuteView() -> UIViewController {
+        let executeView = ExecuteViewController()
+        let network = NetworkService()
+        let presenter = ExecutePresenter(view: executeView, networkServise: network)
+        executeView.presenter = presenter
+        let navVC = UINavigationController(rootViewController: executeView)
+        return navVC
+    }
+    
+    
 }

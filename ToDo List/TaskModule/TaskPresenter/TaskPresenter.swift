@@ -16,7 +16,7 @@ class TaskPresenter: TaskPresenterProtocol {
     
     var network: NetworkServiceProrocol!
     var model: MainModel?
-    var view: TaskViewControllerProtocol?
+    weak var view: TaskViewControllerProtocol?
     
     required init(view: TaskViewControllerProtocol, network: NetworkServiceProrocol, model: MainModel) {
         self.network = network

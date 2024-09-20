@@ -10,7 +10,8 @@ import UIKit
 class TabBarViewController: UITabBarController {
     
     private let mainViewController = Builder.createMainView()
-   
+    private let executeViewController = Builder.createExecuteView()
+    private let addVC = Builder.createAddView()
     private lazy var btn1 = getButton(icon: "house.fill", tag: 0, action: action, color: .gray)
     private lazy var btn2 = getButton(icon: "plus.circle.fill", tag: 1, action: action, color: .gray)
     private lazy var btn3 = getButton(icon: "clock", tag: 2, action: action, color: .gray)
@@ -50,7 +51,7 @@ class TabBarViewController: UITabBarController {
         setupConstraint()
         setOpacite(tag: 0)
         tabBar.isHidden = true
-        setViewControllers([mainViewController], animated: true)
+        setViewControllers([mainViewController, addVC ,executeViewController], animated: true)
         
     }
     private func setupConstraint() {
@@ -72,10 +73,11 @@ class TabBarViewController: UITabBarController {
     }
     
     private func getPresent(tag: Int) {
-        if tag == 1 {
-            let addVC = Builder.createAddView()
-            self.present(addVC, animated: true, completion: nil)
-        }
+        
+//        if tag == 1 {
+//            
+//            self.present(addVC, animated: true, completion: nil)
+//        }
     }
     
     private func getButton(icon:String, tag: Int, action: UIAction, color: UIColor ) -> UIButton {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TaskViewControllerProtocol {
+protocol TaskViewControllerProtocol: AnyObject {
     func success()
 }
 class TaskViewController: UIViewController {
@@ -54,7 +54,7 @@ class TaskViewController: UIViewController {
         let button = UIButton()
         button.setBackgroundImage(UIImage(named: "stop"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(removeAction(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(taskAction(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -73,7 +73,7 @@ class TaskViewController: UIViewController {
         button.setTitle("Закрыть", for: .normal)
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(removeAction(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(dismisAction(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -84,19 +84,21 @@ class TaskViewController: UIViewController {
         getData(model)
         setupElemeted()
         setupConstraint()
-        
-     
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         timer?.invalidate()
     }
-    @objc func removeAction(sender: UIButton) {
-        
     
+    @objc func taskAction(sender: UIButton) {
+        clouserDelete?()
+        dismiss(animated: true)
     }
     
+    @objc func dismisAction(sender: UIButton) {
+        dismiss(animated: true)
+    }
     private func setupElemeted() {
         iconImage.translatesAutoresizingMaskIntoConstraints = false
         circuleView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,7 +158,7 @@ class TaskViewController: UIViewController {
     private func getData(_ model: MainModel) {
         iconImage.image = UIImage(named: model.image)
         nameLabel.text = model.title
-        discriptionLabel.text = model.descriptions
+        discriptionLabel.text = "Описание: \(model.descriptions)"
         timer?.invalidate()
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { _ in
@@ -188,7 +190,8 @@ class TaskViewController: UIViewController {
                 timeLabel = String(format: "00:%02d", seconds)
             }
         } else {
-            
+            clouserDelete?()
+            dismiss(animated: true)
         }
         guard let times = timeLabel else { return }
         circuleView.setProgress(to: circuleProgress / 100, widtAnimation: false, textCenter: times)
